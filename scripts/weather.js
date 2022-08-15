@@ -4,18 +4,22 @@ const apiKey = "afb45605f0d04cee2032c7a5f08141ea";
 let weatherContainer = "";
 var isForcast = false;
 
+
+/* function to get current weather */
 const  getCurrentWeather = async function() {
     const {lat, lon} = await getCurrentPosition();
     return getWeatherFormLocation(lat, lon, currentEndPoint);
 }
 
+/* function to get the forcast */
 const getForcast = async function() {
     const {lat, lon} = await getCurrentPosition();
     const forecast = await getWeatherFormLocation(lat, lon, forecastEndPoint);
-    console.log(forecast);
+
     return forecast;
 }
 
+/* function to get current position from browser */
 const getCurrentPosition = function() {
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -25,15 +29,16 @@ const getCurrentPosition = function() {
             lon: position.coords.longitude
         }
     }).catch(error => {
+        /* location premision denied or other error */
         console.log(error);
     })};
 
-
+/* function to get weather from location (api call) */
 const getWeatherFormLocation = function (lat, lon, endpoint) {
     return fetch(endpoint + "lat=" + lat + "&lon=" + lon + "&units=metric" + "&appid=" + apiKey).then(response => response.json());
 }
     
-
+/* function to display the current weather */
 const displayWeather = async function(weather) {
     weatherContainer.innerHTML = "";
     const weatherDiv = document.createElement("div");
@@ -41,6 +46,7 @@ const displayWeather = async function(weather) {
     var dateOptions = {weekday: 'long'};
     var today = new Date();
     var timeOptions = {hour: '2-digit', minute:'2-digit'}
+    /* displays the current weather */
     weatherDiv.innerHTML = `
         <div class="c-card">
             <div class="c-card__body">
@@ -71,9 +77,11 @@ const displayWeather = async function(weather) {
             </div>
         </div>
     `;
+    /* adds the weather to the weather container */
     weatherContainer.appendChild(weatherDiv);
 }
 
+/* function to display the forcast */
 const displayForcast = async function(forecast) {
     var timeOptions = {hour: '2-digit', minute:'2-digit'}
     weatherContainer.innerHTML = `
@@ -83,6 +91,7 @@ const displayForcast = async function(forecast) {
     </div>
     `;
     const weatherDiv = document.createElement("div");
+    /* loops through the forcast */
     for(let i = 0; i < 5; i++) {
         weatherDiv.innerHTML += `
         <div class="c-card">
@@ -110,18 +119,27 @@ const displayForcast = async function(forecast) {
             </div>
         </div>
         `;
+        /* adds the forcast to the page */
         weatherContainer.appendChild(weatherDiv);
     }
 }
 
+/* function if button is clicked */
 const ForcastButton = async function() {
+    /* checks if isforcast is true or false */
     if(isForcast == false)  {
+        /* if isforcast is false, then it will set it to true */
         isForcast = true;
+        /* gets the forcast */
         var forcast = await getForcast();
+        /* displays the forcast */
         displayForcast(forcast);
     } else{
-        var weather = await getCurrentWeather();
+        /* if isforcast is true, then it will set it to false */
         isForcast = false;
+        /* gets the current weather */
+        var weather = await getCurrentWeather();
+        /* displays the current weather */
         displayWeather(weather);
     }
 }
@@ -129,11 +147,13 @@ const ForcastButton = async function() {
 
 
 
-
+/* checks if dom is ready */
 document.addEventListener('DOMContentLoaded', async function (){
+    /* gets the current weather */
     const currentWeather = await getCurrentWeather();
-    console.log(currentWeather);
     weatherContainer = document.querySelector(".weather-container");
+    /* displays the current weather */
     await displayWeather(currentWeather);
+    /* setup button */
     document.querySelector('.js-buttonWeatherForcast').addEventListener('click', ForcastButton);
 });
