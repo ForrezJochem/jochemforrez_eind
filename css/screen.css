@@ -20,12 +20,12 @@
 
 :root {
     /* Global colors */
-    --global-color-alpha-light: #4F95FF;
-    --global-color-alpha: #3385FF;
-    --global-color-alpha-dark: #2E77E6;
-    --global-color-alpha-x-dark: #1B4186;
-    --global-color-alpha-transparent: #3385ffbf;
-    --global-color-alpha-x-transparent: #3385ff4d;
+    --global-color-alpha-light: #8a4fff;
+    --global-color-alpha: #8f33ff;
+    --global-color-alpha-dark: #712ee6;
+    --global-color-alpha-x-dark: #4d1b86;
+    --global-color-alpha-transparent: #8f33ffbf;
+    --global-color-alpha-x-transparent: #9933ff4d;
 
     --global-color-neutral-xxxx-light: #F5F6FA;
     --global-color-neutral-xxx-light: #E2E3E7;
